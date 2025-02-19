@@ -1,0 +1,89 @@
+specification {
+    element person {
+      style {
+        shape person
+      }
+    }
+    element system
+    element container
+}
+
+model {
+  user = person "Пользователь"
+
+  socialNetwork = system "Социальная сеть" {
+
+    apiGateway = container "API Gateway" {
+      description "Маршрутизация запросов"
+    }
+
+    userService = container "User Service" {
+      description "Регистрация, аутентификация и хранение данных пользователей"
+    }
+
+    postService = container "Post & Comment Service" {
+      description "Управление постами и комментариями"
+    }
+
+    statisticService = container "Statistics Service" {
+      description "Сбор статистики: подсчет лайков, просмотров, комментариев"
+    }
+
+    userDb = container "User DB" {
+      description "Хранение данных пользователей"
+      technology "PostgreSQL"
+      style {
+        shape cylinder
+        color slate
+      }
+    }
+
+    postDb = container "Post DB" {
+      description "Хранение постов и комментариев"
+      technology "PostgreSQL"
+      style {
+        shape cylinder
+        color slate
+      }
+    }
+
+    clickhouseDb = container "Statistic DB" {
+      description "Хранение статистических данных"
+      technology "ClickHouse"
+      style {
+        shape cylinder
+        color slate
+      }
+    }
+
+    kafka = container "Kafka" {
+      description "Обмен событиями между сервисами"
+      technology "Message Broker"
+      style {
+        shape queue
+        color amber
+      }
+    }
+  }
+
+  user -> socialNetwork.apiGateway "Использует" "HTTPS"
+  socialNetwork.apiGateway -> socialNetwork.userService "Маршрутизирует" "JSON/HTTPS"
+  socialNetwork.apiGateway -> socialNetwork.postService "Маршрутизирует" "JSON/HTTPS"
+  socialNetwork.apiGateway -> socialNetwork.statisticService "Маршрутизирует" "JSON/HTTPS"
+
+  socialNetwork.userService -> socialNetwork.userDb "Читает/пишет" "SQL"
+
+  socialNetwork.postService -> socialNetwork.postDb "Читает/пишет" "SQL"
+
+  socialNetwork.statisticService -> socialNetwork.clickhouseDb "Читает/пишет" "SQL"
+
+  socialNetwork.postService -> socialNetwork.kafka "Публикует события о лайках, просмотрах, комментариях" "post_events"
+  socialNetwork.statisticService -> socialNetwork.kafka "Подписывается на события" "post_events"
+}
+
+views {
+   view index {
+        include *
+    }
+}
+
