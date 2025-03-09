@@ -1,0 +1,11 @@
+fastapi[all]
+requests
+pydantic
+pydantic_settings
+sqlalchemy
+uvicorn
+pyjwt
+bcrypt
+passlib[bcrypt]
+cryptography
+psycopg2-binary

@@ -1,0 +1,8 @@
+fastapi[all]
+httpx
+starlette
+requests
+pydantic
+pydantic_settings
+sqlalchemy
+uvicorn
