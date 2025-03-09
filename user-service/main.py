@@ -4,8 +4,10 @@ from fastapi import FastAPI, Depends, HTTPException, status, Response
 from pydantic import BaseModel, EmailStr, constr, Field
 from typing import Optional
 from sqlalchemy.orm import Session
-from jose import jwt, JWTError
-from . import models, db, utils
+import jwt
+import models
+import db
+import utils
 
 
 app = FastAPI(title='User Service API')
@@ -22,7 +24,7 @@ class UserProfile(BaseModel):
     last_name: Optional[str]
     birth_date: Optional[datetime.date]
     email: Optional[EmailStr]
-    phone: Optional[str] = Field(None, regex=r"^\+?[1-9]\d{1,14}$")
+    phone: Optional[str] = Field(None, pattern=r"^\+?[1-9]\d{1,14}$")
 
     class Config:
         orm_mode = True
@@ -70,7 +72,7 @@ def get_current_user(token: str = Depends(utils.get_token), db: Session = Depend
     try:
         auth_data = utils.get_auth_data()
         payload = jwt.decode(token, auth_data['public_key'], algorithms=[auth_data['algorithm']])
-    except JWTError:
+    except jwt.InvalidTokenError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid token')
 
     expire = payload.get('exp')

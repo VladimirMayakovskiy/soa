@@ -8,9 +8,9 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_USER: str
     DB_PASSWORD: str
-    SECRET_KEY: str
     PRIVATE_KEY_PATH: str
     PUBLIC_KEY_PATH: str
+    ALGORITHM: str
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
     )
@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 settings = Settings()
 
 
-DATABASE_URL = f"postgresql+psycopg://{settings.DB_USER}:{settings.DB_PASSWORD}@" \
+DATABASE_URL = f"postgresql+psycopg2://{settings.DB_USER}:{settings.DB_PASSWORD}@" \
                f"{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
 
 

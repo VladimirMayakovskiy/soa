@@ -1,8 +1,9 @@
 import datetime
 from datetime import date
 from sqlalchemy import Integer, String, DateTime, func
-from sqlalchemy.orm import Mapped, mapped_column
-from db import Base
+from sqlalchemy.orm import Mapped, mapped_column, declarative_base
+
+Base = declarative_base()
 
 
 class User(Base):

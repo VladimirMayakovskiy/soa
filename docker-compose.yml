@@ -1,6 +1,7 @@
 services:
   api-gateway:
     build: ./api-gateway
+    container_name: api_gateway
     ports:
       - "8000:8000"
     depends_on:
@@ -10,33 +11,34 @@ services:
 
   user-service:
     build: ./user-service
+    container_name: user_service
     ports:
       - "8001:8001"
     depends_on:
-      - db
+      - postgres
     environment:
-      DB_HOST: "db"
-      DB_PORT: "5432"
-      DB_USER: "user1"
-      DB_PASSWORD: "password"
-      DB_NAME: "userdb"
-      PRIVATE_KEY_PATH: "/app/secrets/signature.pem"
-      PUBLIC_KEY_PATH: "/app/secrets/signature.pub"
-      ALGORITHM: "RS256"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: admin
+      DB_PASSWORD: admin
+      DB_NAME: user_db
+      PRIVATE_KEY_PATH: /secrets/signature.pem
+      PUBLIC_KEY_PATH: /secrets/signature.pub
+      ALGORITHM: RS256
     volumes:
-      - ./secrets:/app/secrets
+      - ./secrets:/secrets
 
-  db:
-    image: postgres:13
-    container_name: postgres_fast_api
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
     environment:
-      POSTGRES_DB: userdb
-      POSTGRES_USER: user1
-      POSTGRES_PASSWORD: password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: user_db
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:

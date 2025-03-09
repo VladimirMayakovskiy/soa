@@ -1,4 +1,8 @@
-fastapi==0.115.11
-httpx==0.28.1
-pydantic_settings==2.8.1
-starlette==0.46.0
+fastapi[all]
+httpx
+starlette
+requests
+pydantic
+pydantic_settings
+sqlalchemy
+uvicorn
