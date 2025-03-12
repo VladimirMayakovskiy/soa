@@ -1,0 +1,132 @@
+openapi: 3.1.0
+info:
+  title: Proxy API
+  version: 0.1.0
+
+paths:
+  /{path}:
+    get:
+      summary: Proxy GET request
+      operationId: proxy__path__get
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProxyBodyScheme'
+        '503':
+          description: Service Unavailable - The user service could not be reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+          '500':
+            description: Internal Server Error - Something went wrong with the API Gateway
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    detail:
+                      type: string
+    post:
+      summary: Proxy POST request
+      operationId: proxy__path__post
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProxyBodyScheme'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProxyBodyScheme'
+        '503':
+          description: Service Unavailable - The user service could not be reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+        '500':
+          description: Internal Server Error - Something went wrong with the API Gateway
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+    put:
+      summary: Proxy PUT request
+      operationId: proxy__path__put
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProxyBodyScheme'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProxyBodyScheme'
+        '503':
+          description: Service Unavailable - The user service could not be reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+        '500':
+          description: Internal Server Error - Something went wrong with the API Gateway
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+
+components:
+  schemas:
+    ProxyBody:
+      type: object
+      properties:
+        content:
+          anyOf:
+            - type: object
+            - type: 'null'
+          title: Content
