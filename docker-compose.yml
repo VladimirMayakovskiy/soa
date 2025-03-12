@@ -1,16 +1,16 @@
 services:
-  api-gateway:
-    build: ./api-gateway
+  api_gateway:
+    build: api_gateway
     container_name: api_gateway
     ports:
       - "8000:8000"
     depends_on:
-      - user-service
+      - user_service
     environment:
-      USER_SERVICE_URL: "http://user-service:8001"
+      USER_SERVICE_URL: "http://user_service:8001"
 
-  user-service:
-    build: ./user-service
+  user_service:
+    build: user_service
     container_name: user_service
     ports:
       - "8001:8001"

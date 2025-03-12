@@ -11,7 +11,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRegister'
+              $ref: '#/components/schemas/UserSignupScheme'
         required: true
       responses:
         '200':
@@ -19,7 +19,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/UserResponseScheme'
         '422':
           description: Validation Error
           content:
@@ -34,7 +34,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRegister'
+              $ref: '#/components/schemas/UserSignupScheme'
         required: true
       responses:
         '200':
@@ -56,7 +56,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserProfile'
+              $ref: '#/components/schemas/UserUpdateScheme'
         required: true
       responses:
         '200':
@@ -64,7 +64,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserProfile'
+                $ref: '#/components/schemas/UserResponseScheme'
         '422':
           description: Validation Error
           content:
@@ -81,7 +81,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserProfile'
+                $ref: '#/components/schemas/UserResponseScheme'
 components:
   schemas:
     HTTPValidationError:
@@ -93,63 +93,7 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    UserProfile:
-      properties:
-        first_name:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: First Name
-        last_name:
-          anyOf:
-            - type: string
-            - type: 'null'
-          title: Last Name
-        birth_date:
-          anyOf:
-            - type: string
-              format: date
-            - type: 'null'
-          title: Birth Date
-        email:
-          anyOf:
-            - type: string
-              format: email
-            - type: 'null'
-          title: Email
-        phone:
-          anyOf:
-            - type: string
-              pattern: ^\+?[1-9]\d{1,14}$
-            - type: 'null'
-          title: Phone
-      type: object
-      required:
-        - first_name
-        - last_name
-        - birth_date
-        - email
-      title: UserProfile
-    UserRegister:
-      properties:
-        username:
-          type: string
-          title: Username
-        email:
-          type: string
-          format: email
-          title: Email
-        password:
-          type: string
-          minLength: 6
-          title: Password
-      type: object
-      required:
-        - username
-        - email
-        - password
-      title: UserRegister
-    UserResponse:
+    UserResponseScheme:
       properties:
         first_name:
           anyOf:
@@ -195,15 +139,62 @@ components:
           title: Updated At
       type: object
       required:
-        - first_name
-        - last_name
-        - birth_date
-        - email
         - id
         - username
         - created_at
         - updated_at
-      title: UserResponse
+      title: UserResponseScheme
+    UserSignupScheme:
+      properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          minLength: 6
+          title: Password
+      type: object
+      required:
+        - username
+        - email
+        - password
+      title: UserSignupScheme
+    UserUpdateScheme:
+      properties:
+        first_name:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Last Name
+        birth_date:
+          anyOf:
+            - type: string
+              format: date
+            - type: 'null'
+          title: Birth Date
+        email:
+          anyOf:
+            - type: string
+              format: email
+            - type: 'null'
+          title: Email
+        phone:
+          anyOf:
+            - type: string
+              pattern: ^\+?[1-9]\d{1,14}$
+            - type: 'null'
+          title: Phone
+      type: object
+      title: UserUpdateScheme
     ValidationError:
       properties:
         loc:

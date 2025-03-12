@@ -20,7 +20,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProxyBody'
+                $ref: '#/components/schemas/ProxyBodyScheme'
         '503':
           description: Service Unavailable - The user service could not be reached
           content:
@@ -53,14 +53,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProxyBody'
+              $ref: '#/components/schemas/ProxyBodyScheme'
       responses:
         '200':
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProxyBody'
+                $ref: '#/components/schemas/ProxyBodyScheme'
         '503':
           description: Service Unavailable - The user service could not be reached
           content:
@@ -93,14 +93,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProxyBody'
+              $ref: '#/components/schemas/ProxyBodyScheme'
       responses:
         '200':
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProxyBody'
+                $ref: '#/components/schemas/ProxyBodyScheme'
         '503':
           description: Service Unavailable - The user service could not be reached
           content:
