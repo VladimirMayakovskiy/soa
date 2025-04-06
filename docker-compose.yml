@@ -1,0 +1,45 @@
+services:
+  api_gateway:
+    build: api_gateway
+    container_name: api_gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - user_service
+    environment:
+      USER_SERVICE_URL: "http://user_service:8001"
+
+  user_service:
+    build: user_service
+    container_name: user_service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: admin
+      DB_PASSWORD: admin
+      DB_NAME: user_db
+      PRIVATE_KEY_PATH: /secrets/signature.pem
+      PUBLIC_KEY_PATH: /secrets/signature.pub
+      ALGORITHM: RS256
+    volumes:
+      - ./secrets:/secrets
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: user_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local
