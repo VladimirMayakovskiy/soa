@@ -7,3 +7,9 @@ pydantic_settings
 sqlalchemy
 uvicorn
 respx
+grpcio==1.71.0
+grpcio-tools==1.71.0
+pyjwt
+bcrypt
+passlib[bcrypt]
+cryptography

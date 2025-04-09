@@ -1,0 +1,4 @@
+requests==2.26.0
+grpcio==1.71.0
+grpcio-tools==1.71.0
+httpx

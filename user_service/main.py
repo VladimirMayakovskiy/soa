@@ -8,7 +8,9 @@ import jwt
 import models
 import db
 import utils
+import logging
 
+logging.basicConfig(level=logging.DEBUG)
 
 app = FastAPI(title='User Service API')
 
@@ -106,3 +108,22 @@ def update_profile(user_data: UserUpdateScheme, cur_user: models.User = Depends(
 @app.get('/profile', response_model=UserResponseScheme)
 def get_user_profile(user: models.User = Depends(get_current_user)):
     return user
+
+
+@app.get("/public_key")
+async def get_public_key():
+    auth_data = utils.get_auth_data()
+    return {'public_key': auth_data['public_key'], 'algorithm': auth_data['algorithm']}
+
+
+@app.delete("/clear")
+async def clear(pattern: str, db: Session = Depends(db.get_db)):
+    deleted_by_email = db.query(models.User).filter(models.User.email.like(f"%{pattern}%")).delete(synchronize_session=False)
+    deleted_by_username = db.query(models.User).filter(models.User.username.like(f"%{pattern}%")).delete(synchronize_session=False)
+    db.commit()
+
+    return {
+        "deleted_by_email": deleted_by_email,
+        "deleted_by_username": deleted_by_username
+    }
+
