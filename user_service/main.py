@@ -1,9 +1,10 @@
 import datetime
 
-from fastapi import FastAPI, Depends, HTTPException, status, Response
+from fastapi import FastAPI, Depends, HTTPException, status, Response, BackgroundTasks
 from pydantic import BaseModel, EmailStr, constr, Field
 from typing import Optional
 from sqlalchemy.orm import Session
+from kafka_client import get_producer
 import jwt
 import models
 import db
@@ -40,7 +41,11 @@ class UserResponseScheme(UserUpdateScheme):
 
 
 @app.post('/signup', response_model=UserResponseScheme)
-def register(user_data: UserSignupScheme, db: Session = Depends(db.get_db)):
+async def register(
+        user_data: UserSignupScheme,
+        background_tasks: BackgroundTasks,
+        db: Session = Depends(db.get_db)
+):
     if db.query(models.User).filter(models.User.email == user_data.email).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Email already register')
 
@@ -53,6 +58,15 @@ def register(user_data: UserSignupScheme, db: Session = Depends(db.get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    background_tasks.add_task(
+        get_producer().send_event,
+        "user_register",
+        {
+            "user_id": new_user.id,
+            "register_at": new_user.created_at.isoformat() + "Z"
+        }
+    )
     return new_user
 
 

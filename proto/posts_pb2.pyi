@@ -7,12 +7,56 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class Comment(_message.Message):
+    __slots__ = ("id", "post_id", "user_id", "text", "created_at")
+    ID_FIELD_NUMBER: _ClassVar[int]
+    POST_ID_FIELD_NUMBER: _ClassVar[int]
+    USER_ID_FIELD_NUMBER: _ClassVar[int]
+    TEXT_FIELD_NUMBER: _ClassVar[int]
+    CREATED_AT_FIELD_NUMBER: _ClassVar[int]
+    id: int
+    post_id: int
+    user_id: str
+    text: str
+    created_at: _timestamp_pb2.Timestamp
+    def __init__(self, id: _Optional[int] = ..., post_id: _Optional[int] = ..., user_id: _Optional[str] = ..., text: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+
+class CreateCommentRequest(_message.Message):
+    __slots__ = ("post_id", "user_id", "text")
+    POST_ID_FIELD_NUMBER: _ClassVar[int]
+    USER_ID_FIELD_NUMBER: _ClassVar[int]
+    TEXT_FIELD_NUMBER: _ClassVar[int]
+    post_id: int
+    user_id: str
+    text: str
+    def __init__(self, post_id: _Optional[int] = ..., user_id: _Optional[str] = ..., text: _Optional[str] = ...) -> None: ...
+
+class ListCommentsRequest(_message.Message):
+    __slots__ = ("post_id", "page", "limit", "user_id")
+    POST_ID_FIELD_NUMBER: _ClassVar[int]
+    PAGE_FIELD_NUMBER: _ClassVar[int]
+    LIMIT_FIELD_NUMBER: _ClassVar[int]
+    USER_ID_FIELD_NUMBER: _ClassVar[int]
+    post_id: int
+    page: int
+    limit: int
+    user_id: str
+    def __init__(self, post_id: _Optional[int] = ..., page: _Optional[int] = ..., limit: _Optional[int] = ..., user_id: _Optional[str] = ...) -> None: ...
+
+class ListCommentsResponse(_message.Message):
+    __slots__ = ("com", "total")
+    COM_FIELD_NUMBER: _ClassVar[int]
+    TOTAL_FIELD_NUMBER: _ClassVar[int]
+    com: _containers.RepeatedCompositeFieldContainer[Comment]
+    total: int
+    def __init__(self, com: _Optional[_Iterable[_Union[Comment, _Mapping]]] = ..., total: _Optional[int] = ...) -> None: ...
+
 class Post(_message.Message):
-    __slots__ = ("id", "title", "description", "creator_id", "created_at", "updated_at", "private", "tags")
+    __slots__ = ("id", "title", "description", "user_id", "created_at", "updated_at", "private", "tags")
     ID_FIELD_NUMBER: _ClassVar[int]
     TITLE_FIELD_NUMBER: _ClassVar[int]
     DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
-    CREATOR_ID_FIELD_NUMBER: _ClassVar[int]
+    USER_ID_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
     PRIVATE_FIELD_NUMBER: _ClassVar[int]
@@ -20,14 +64,14 @@ class Post(_message.Message):
     id: int
     title: str
     description: str
-    creator_id: str
+    user_id: str
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
     private: bool
     tags: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, id: _Optional[int] = ..., title: _Optional[str] = ..., description: _Optional[str] = ..., creator_id: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., private: bool = ..., tags: _Optional[_Iterable[str]] = ...) -> None: ...
+    def __init__(self, id: _Optional[int] = ..., title: _Optional[str] = ..., description: _Optional[str] = ..., user_id: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., private: bool = ..., tags: _Optional[_Iterable[str]] = ...) -> None: ...
 
-class PostRequest(_message.Message):
+class PostRef(_message.Message):
     __slots__ = ("id", "user_id")
     ID_FIELD_NUMBER: _ClassVar[int]
     USER_ID_FIELD_NUMBER: _ClassVar[int]
