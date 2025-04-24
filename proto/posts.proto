@@ -5,18 +5,44 @@ package posts;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
+message Comment {
+  int64 id = 1;
+  int32 post_id = 2;
+  string user_id = 3;
+  string text = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message CreateCommentRequest {
+  int32 post_id = 1;
+  string user_id = 2;
+  string text = 3;
+}
+
+message ListCommentsRequest {
+  int32 post_id = 1;
+  int32 page = 2;
+  int32 limit = 3;
+  string user_id = 4;
+}
+
+message ListCommentsResponse {
+  repeated Comment com = 1;
+  int32 total = 2;
+}
+
 message Post {
   int32 id = 1;
   string title = 2;
   string description = 3;
-  string creator_id = 4;
+  string user_id = 4;
   google.protobuf.Timestamp created_at = 5;
   google.protobuf.Timestamp updated_at = 6;
   bool private = 7;
   repeated string tags = 8;
 }
 
-message PostRequest {
+message PostRef {
   int32 id = 1;
   string user_id = 2;
 }
@@ -51,8 +77,14 @@ message ListPostsResponse {
 
 service PostService {
   rpc CreatePost(CreatePostRequest) returns (Post);
-  rpc GetPost(PostRequest) returns (Post);
+  rpc GetPost(PostRef) returns (Post);
   rpc UpdatePost(UpdatePostRequest) returns (Post);
-  rpc DeletePost(PostRequest) returns (google.protobuf.Empty);
+  rpc DeletePost(PostRef) returns (google.protobuf.Empty);
   rpc ListPosts(ListPostsRequest) returns (ListPostsResponse);
+
+  rpc LikePost(PostRef) returns (google.protobuf.Empty);
+  rpc ViewPost(PostRef) returns (google.protobuf.Empty);
+
+  rpc CreateComment(CreateCommentRequest) returns (Comment);
+  rpc ListComments(ListCommentsRequest) returns (ListCommentsResponse);
 }

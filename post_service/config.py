@@ -8,8 +8,11 @@ class Settings(BaseSettings):
     POST_DB_NAME: str
     POST_DB_USER: str
     POST_DB_PASSWORD: str
+
     POST_SERVER_PORT: str
     POST_SERVER_ADDR: str
+
+    KAFKA_BOOTSTRAP_SERVERS: str
 
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..", ".env"),

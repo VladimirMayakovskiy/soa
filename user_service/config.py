@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     PRIVATE_KEY_PATH: str
     PUBLIC_KEY_PATH: str
     ALGORITHM: str
+
+    KAFKA_BOOTSTRAP_SERVERS: str
+
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env"),
         extra="ignore"
