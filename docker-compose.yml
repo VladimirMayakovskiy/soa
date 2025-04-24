@@ -1,13 +1,18 @@
 services:
   api_gateway:
-    build: api_gateway
+    build:
+      context: .
+      dockerfile: api_gateway.dockerfile
     container_name: api_gateway
     ports:
       - "8000:8000"
     depends_on:
       - user_service
+      - post_service
     environment:
       USER_SERVICE_URL: "http://user_service:8001"
+      POST_SERVER_ADDR: "post_service:51075"
+      POST_SERVER_PORT: 51075
 
   user_service:
     build: user_service
@@ -15,9 +20,9 @@ services:
     ports:
       - "8001:8001"
     depends_on:
-      - postgres
+      - user_postgres
     environment:
-      DB_HOST: postgres
+      DB_HOST: user_postgres
       DB_PORT: 5432
       DB_USER: admin
       DB_PASSWORD: admin
@@ -28,9 +33,39 @@ services:
     volumes:
       - ./secrets:/secrets
 
-  postgres:
+  post_service:
+    build:
+      context: .
+      dockerfile: post_service.dockerfile
+    container_name: post_service
+    ports:
+      - "51075:51075"
+    depends_on:
+      - post_postgres
+    environment:
+      POST_DB_HOST: post_postgres
+      POST_DB_PORT: 5432
+      POST_DB_USER: padmin
+      POST_DB_PASSWORD: padmin
+      POST_DB_NAME: post_db
+      POST_SERVER_PORT: 51075
+      POST_SERVER_ADDR: "0.0.0.0:51075"
+
+  post_postgres:
     image: postgres:latest
-    container_name: postgres_container
+    container_name: post_db_container
+    environment:
+      POSTGRES_USER: padmin
+      POSTGRES_PASSWORD: padmin
+      POSTGRES_DB: post_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - post_db_data:/var/lib/postgresql/data
+
+  user_postgres:
+    image: postgres:latest
+    container_name: user_db_container
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -38,8 +73,21 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - user_db_data:/var/lib/postgresql/data
+
+  tests:
+    build:
+      context: .
+      dockerfile: tests/Dockerfile
+    environment:
+      POST_SERVER_ADDR: "post_service:51075"
+      USER_GATEWAY_URL: "http://user_service:8001"
+    depends_on:
+      - post_service
+      - user_service
 
 volumes:
-  postgres_data:
+  post_db_data:
+    driver: local
+  user_db_data:
     driver: local
