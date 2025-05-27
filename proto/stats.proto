@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package stats;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message PostStats {
+  int32 post_id = 1;
+  int64 views = 2;
+  int64 likes = 3;
+  int64 comments = 4;
+}
+
+message DateCount {
+  string date = 1;
+  int64 count = 2;
+}
+
+message PostDynamics {
+  int32 post_id = 1;
+  repeated DateCount data = 2;
+}
+
+message PostRank {
+  int32 post_id = 1;
+  int64 count = 2;
+}
+
+message UserRank {
+  string user_id = 1;
+  int64 count = 2;
+}
+
+message TopPostsResponse {
+  repeated PostRank items = 1;
+}
+
+message TopUsersResponse {
+  repeated UserRank items = 1;
+}
+
+service StatService {
+  rpc GetPostStats(PostRequest) returns (PostStats);
+
+  rpc GetViewsDynamics(PostRequest) returns (PostDynamics);
+  rpc GetLikesDynamics(PostRequest) returns (PostDynamics);
+  rpc GetCommentsDynamics(PostRequest) returns (PostDynamics);
+
+  rpc GetTopPosts(TopRequest) returns (TopPostsResponse);
+  rpc GetTopUsers(TopRequest) returns (TopUsersResponse);
+}
+
+message PostRequest {
+  int32 post_id = 1;
+}
+
+enum Metric {
+  VIEWS = 0;
+  LIKES = 1;
+  COMMENTS = 2;
+}
+
+message TopRequest {
+  Metric metric = 1;
+}

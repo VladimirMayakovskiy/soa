@@ -11,9 +11,13 @@ RUN pip install pytest pytest-asyncio
 
 COPY tests/*.py tests/
 
-COPY proto/posts.proto proto/posts.proto
-COPY proto/posts_pb2.py proto/posts_pb2.py
-COPY proto/posts_pb2_grpc.py proto/posts_pb2_grpc.py
+COPY proto/ proto/
+
+COPY stats_service/service.py stats_service/service.py
+
+COPY api_gateway/main.py api_gateway/main.py
+COPY api_gateway/grpc_client.py api_gateway/grpc_client.py
+COPY api_gateway/config.py api_gateway/config.py
 
 ENV PYTHONPATH=/project:/project/proto
 

@@ -1,0 +1,6 @@
+aiokafka
+clickhouse-driver
+grpcio
+grpcio-tools
+protobuf
+pydantic_settings

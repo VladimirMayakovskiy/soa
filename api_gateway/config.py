@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     POST_SERVER_PORT: str
     POST_SERVER_ADDR: str
 
+    STATS_SERVER_PORT: str
+    STATS_SERVER_ADDR: str
+
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env"),
         extra="ignore"
