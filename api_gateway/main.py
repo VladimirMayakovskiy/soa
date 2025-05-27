@@ -1,5 +1,4 @@
 import functools
-from dataclasses import asdict
 
 import httpx
 import jwt
@@ -58,7 +57,7 @@ def handle_errors(func):
 async def proxy_grpc(method, *args):
     response = await method(*args)
     return JSONResponse(
-        content=MessageToDict(response, preserving_proto_field_name=True),
+        content=MessageToDict(response, preserving_proto_field_name=True, always_print_fields_with_no_presence=True),
         status_code=200
     )
 

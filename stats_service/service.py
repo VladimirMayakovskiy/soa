@@ -1,7 +1,12 @@
 from datetime import datetime, timedelta
 
 from proto import stats_pb2, stats_pb2_grpc
-from stats_service.clickhouse_client import ClickHouseClient
+
+import os
+if os.environ.get("TEST", "false") == "true":
+    ClickHouseClient = None
+else:
+    from stats_service.clickhouse_client import ClickHouseClient
 
 
 class StatService(stats_pb2_grpc.StatServiceServicer):

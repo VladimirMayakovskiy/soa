@@ -154,6 +154,11 @@ services:
     environment:
       POST_SERVER_ADDR: "post_service:51075"
       USER_GATEWAY_URL: "http://user_service:8001"
+      USER_SERVICE_URL: "http://user_service:8001"
+      STATS_SERVER_ADDR: "stats_service:50052"
+      POST_SERVER_PORT: 51075
+      STATS_SERVER_PORT: 50052
+      TEST: "true"
     depends_on:
       - post_service
       - user_service
