@@ -1,9 +1,21 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from config import DATABASE_URL
+from config import TEST_DATABASE_URL, DATABASE_URL as DATABASE_URL_
 from models import Base
 
-engine = create_engine(DATABASE_URL)
+if os.getenv("TEST", "false") == "true" and TEST_DATABASE_URL is not None:
+    DATABASE_URL = TEST_DATABASE_URL
+    from sqlalchemy.pool import StaticPool
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool
+    )
+else:
+    DATABASE_URL = DATABASE_URL_
+    engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

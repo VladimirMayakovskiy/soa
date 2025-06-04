@@ -57,16 +57,39 @@ def handle_errors(func):
 async def proxy_grpc(method, *args):
     response = await method(*args)
     return JSONResponse(
-        content=MessageToDict(response, preserving_proto_field_name=True),
+        content=MessageToDict(response, preserving_proto_field_name=True, always_print_fields_with_no_presence=True),
         status_code=200
     )
+
+@app.get("/stats/{post_id}")
+async def post_stats(post_id: int):
+    return await proxy_grpc(grpc_client.get_post_stats, post_id)
+
+@app.get("/stats/{post_id}/views")
+async def post_views_dynamics(post_id: int):
+    return await proxy_grpc(grpc_client.get_views_dynamics, post_id)
+
+@app.get("/stats/{post_id}/likes")
+async def post_views_dynamics(post_id: int):
+    return await proxy_grpc(grpc_client.get_likes_dynamics, post_id)
+
+@app.get("/stats/{post_id}/comments")
+async def post_views_dynamics(post_id: int):
+    return await proxy_grpc(grpc_client.get_comments_dynamics, post_id)
+
+@app.get("/stats/top/posts")
+async def top_posts(metric: str):
+    return await proxy_grpc(grpc_client.get_top_posts, metric)
+
+@app.get("/stats/top/users")
+async def top_users(metric: str):
+    return await proxy_grpc(grpc_client.get_top_users, metric)
 
 
 @app.post("/post")
 @handle_errors
 async def create_post_e(request: Request, user_id: str = Depends(get_current_user)):
     data = await request.json()
-    print(data)
     return await proxy_grpc(grpc_client.create_post,SimpleNamespace(**data), user_id)
 
 
@@ -85,7 +108,7 @@ async def delete_post_e(post_id: int, user_id: str = Depends(get_current_user)):
 
 @app.get("/post/{post_id}")
 @handle_errors
-async def delete_post_e(post_id: int, user_id: str = Depends(get_current_user)):
+async def get_post_e(post_id: int, user_id: str = Depends(get_current_user)):
     return await proxy_grpc(grpc_client.get_post,post_id, user_id)
 
 
