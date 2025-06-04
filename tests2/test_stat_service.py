@@ -1,9 +1,7 @@
-import pytest
 import asyncio
 from datetime import datetime, timedelta
 from google.protobuf.timestamp_pb2 import Timestamp
 from proto import stats_pb2
-from sqlalchemy.orm import Session
 
 def run_async(coro):
     return asyncio.get_event_loop().run_until_complete(coro)
@@ -16,7 +14,7 @@ def test_get_post_stats_counts(stat_service):
     req = stats_pb2.PostRequest(post_id=42)
     ctx = None
 
-    resp: stats_pb2.PostStats = run_async(stat_service.GetPostStats(req, ctx))
+    resp = run_async(stat_service.GetPostStats(req, ctx))
 
     assert resp.post_id == 42
     assert resp.views == 5
@@ -24,7 +22,7 @@ def test_get_post_stats_counts(stat_service):
     assert resp.comments == 3
 
 
-def test_get_views_dynamics_30_days_zero_and_some_counts(stat_service):
+def test_get_views_dynamics(stat_service):
     today = datetime.utcnow().date()
     start = today - timedelta(days=29)
     end = today
@@ -40,7 +38,7 @@ def test_get_views_dynamics_30_days_zero_and_some_counts(stat_service):
     req = stats_pb2.PostRequest(post_id=100)
     ctx = None
 
-    resp: stats_pb2.PostDynamics = run_async(stat_service.GetViewsDynamics(req, ctx))
+    resp= run_async(stat_service.GetViewsDynamics(req, ctx))
 
     data_list = list(resp.data)
     assert len(data_list) == 30
@@ -52,7 +50,7 @@ def test_get_views_dynamics_30_days_zero_and_some_counts(stat_service):
     assert result_map[end.isoformat()] == 0
 
 
-def test_get_top_posts_and_top_users(stat_service):
+def test_get_top_posts_and_top(stat_service):
     stat_service._ch._rows_map['TopPosts'] = [(1, 10), (2, 5)]
     stat_service._ch._rows_map['TopUsers'] = [('u1', 8), ('u2', 4)]
 

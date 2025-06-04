@@ -26,7 +26,7 @@ def run_async(coro):
     return asyncio.get_event_loop().run_until_complete(coro)
 
 
-def test_create_post_and_persist(db_session_post: Session, post_service):
+def test_create_post_and_persist(db_session_post, post_service):
     req = posts_pb2.CreatePostRequest(
         title="Тест-заголовок",
         description="Описание тест-поста",
@@ -34,7 +34,7 @@ def test_create_post_and_persist(db_session_post: Session, post_service):
         private=False,
         tags=["t1", "t2"]
     )
-    returned: posts_pb2.Post = run_async(post_service.CreatePost(req, None))
+    returned= run_async(post_service.CreatePost(req, None))
 
     assert returned.id == 1
     assert returned.title == "Тест-заголовок"
@@ -45,7 +45,7 @@ def test_create_post_and_persist(db_session_post: Session, post_service):
     assert returned.created_at
 
     db_session_post.expire_all()
-    post_in_db: Post = db_session_post.query(Post).filter(Post.id == returned.id).first()
+    post_in_db = db_session_post.query(Post).filter(Post.id == returned.id).first()
     assert post_in_db is not None
     assert post_in_db.title == "Тест-заголовок"
     assert post_in_db.user_id == "user42"

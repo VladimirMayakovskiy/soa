@@ -1,7 +1,6 @@
 import pytest
 import asyncio
 import json
-import time
 from datetime import datetime
 from aiokafka import AIOKafkaProducer
 

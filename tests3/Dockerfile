@@ -15,4 +15,4 @@ COPY proto /app/proto
 
 WORKDIR /app
 
-CMD ["pytest", "-q", "--disable-warnings", "--maxfail=1"]
+CMD ["pytest", "-vv", "--disable-warnings", "--maxfail=1"]

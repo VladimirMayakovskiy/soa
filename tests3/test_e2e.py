@@ -1,7 +1,7 @@
 import pytest
 import asyncio
 import httpx
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from proto import stats_pb2, stats_pb2_grpc
 
@@ -28,7 +28,7 @@ async def test_e2e_view_like_comment_flow(clear_user_fixture):
         )
         assert login_resp.status_code == 200
 
-
+        #-------------------------------
         create_resp = await client.post(
             "/post",
             json={"title": "E2E", "description": "Test post", "private": False, "tags": ["ww", "e2e"]},
@@ -48,12 +48,12 @@ async def test_e2e_view_like_comment_flow(clear_user_fixture):
 
         comment_resp = await client.post(
             f"/post/{post_id}/comment",
-            json={"text": "Nice"}
+            json={"text": "comm"}
         )
         assert comment_resp.status_code == 200
         comment_data = comment_resp.json()
         assert comment_data["post_id"] == post_id
-        assert comment_data["text"] == "Nice"
+        assert comment_data["text"] == "comm"
 
 
     async with httpx.AsyncClient(base_url=base) as client:
@@ -80,7 +80,7 @@ async def test_e2e_view_like_comment_flow(clear_user_fixture):
     await clear_user_fixture("e2euser")
 
 @pytest.mark.asyncio
-async def test_e2e_private_post_visibility_and_update(clear_user_fixture):
+async def test_e2e_private_post_and_update(clear_user_fixture):
     await clear_user_fixture("userA_e2e")
     await clear_user_fixture("userB_e2e")
 
@@ -191,7 +191,6 @@ async def test_e2e_private_post_visibility_and_update(clear_user_fixture):
         assert view_resp.status_code == 200
 
 
-    await asyncio.sleep(5)
     async with httpx.AsyncClient(base_url=base) as client:
         stats_resp = await client.get(f"/stats/{post_id}")
         assert stats_resp.status_code == 200
@@ -209,7 +208,7 @@ async def test_e2e_private_post_visibility_and_update(clear_user_fixture):
 
 
 @pytest.mark.asyncio
-async def test_e2e_multiple_posts_and_aggregate_stats_via_gateway(clear_user_fixture):
+async def test_e2e_multiple_posts_and_stats(clear_user_fixture):
     await clear_user_fixture("e2euser")
     base = "http://api_gateway:8000"
 
@@ -258,8 +257,6 @@ async def test_e2e_multiple_posts_and_aggregate_stats_via_gateway(clear_user_fix
         for _ in range(2):
             c2 = await client.post(f"/post/{pid2}/comment", json={"text": "comment2"})
             assert c2.status_code == 200
-
-
 
 
     async with httpx.AsyncClient(base_url=base) as client:
