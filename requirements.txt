@@ -1,0 +1,17 @@
+fastapi[all]
+requests
+uvicorn
+sqlalchemy
+pydantic
+pydantic-settings
+passlib[bcrypt]
+aiokafka
+PyJWT
+pytest
+httpx
+pytest-asyncio
+cryptography
+grpcio==1.71.0
+grpcio-tools==1.71.0
+protobuf
+clickhouse-driver

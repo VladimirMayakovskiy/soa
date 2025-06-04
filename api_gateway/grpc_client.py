@@ -47,14 +47,14 @@ async def update_post(post_id: int, post_data: PostSchema, user_id: str):
 async def delete_post(post_id: int, user_id: str):
     async with _channel() as ch:
         stub = posts_pb2_grpc.PostServiceStub(ch)
-        req = posts_pb2.PostRequest(id=post_id, user_id=user_id)
+        req = posts_pb2.PostRef(id=post_id, user_id=user_id)
         return await stub.DeletePost(req)
 
 
 async def get_post(post_id: int, user_id: str):
     async with _channel() as ch:
         stub = posts_pb2_grpc.PostServiceStub(ch)
-        req = posts_pb2.PostRequest(id=post_id, user_id=user_id)
+        req = posts_pb2.PostRef(id=post_id, user_id=user_id)
         return await stub.GetPost(req)
 
 

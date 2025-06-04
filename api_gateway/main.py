@@ -108,7 +108,7 @@ async def delete_post_e(post_id: int, user_id: str = Depends(get_current_user)):
 
 @app.get("/post/{post_id}")
 @handle_errors
-async def delete_post_e(post_id: int, user_id: str = Depends(get_current_user)):
+async def get_post_e(post_id: int, user_id: str = Depends(get_current_user)):
     return await proxy_grpc(grpc_client.get_post,post_id, user_id)
 
 

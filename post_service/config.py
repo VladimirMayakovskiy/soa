@@ -25,3 +25,4 @@ settings = Settings()
 
 DATABASE_URL = f"postgresql+psycopg2://{settings.POST_DB_USER}:{settings.POST_DB_PASSWORD}@" \
                f"{settings.POST_DB_HOST}:{settings.POST_DB_PORT}/{settings.POST_DB_NAME}"
+TEST_DATABASE_URL = "sqlite:////tmp/test_db.sqlite"

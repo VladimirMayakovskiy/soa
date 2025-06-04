@@ -25,6 +25,7 @@ settings = Settings()
 
 DATABASE_URL = f"postgresql+psycopg2://{settings.DB_USER}:{settings.DB_PASSWORD}@" \
                f"{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
+TEST_DATABASE_URL = "sqlite:////tmp/test_db.sqlite"
 
 
 with open(settings.PRIVATE_KEY_PATH, "r") as file:
